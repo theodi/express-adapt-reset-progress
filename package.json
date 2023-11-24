@@ -1,0 +1,20 @@
+{
+  "name": "express-adapt-reset-progress",
+  "version": "1.0.0",
+  "description": "A simple Node.js Express application to reset page-level progress in an adapt course",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theodi/express-adapt-reset-progress"
+  },
+  "author": "David Tarrant",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "^4.4.6",
+    "dotenv": "^10.0.0"
+  }
+}
