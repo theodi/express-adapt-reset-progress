@@ -34,10 +34,10 @@ app.post('/:collection/:id', async (req, res) => {
 
     if (updateResult.modifiedCount === 0) {
       res.status(304).json({ message: "Not modified" });
+    } else {
+      const responseMessage = `Success`;
+      res.status(200).json({ message: responseMessage });
     }
-
-    const responseMessage = `Success`;
-    res.status(200).json({ message: responseMessage });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ error: 'Internal server error' });
