@@ -30,17 +30,17 @@ app.post('/:collection/:id', async (req, res) => {
     // Perform the update operation
     const updateResult = await collection.updateOne({ _id: objectId }, updateOperation);
 
-    if (updateResult.modifiedCount === 0) {
-      throw new Error('Not modified');
-    }
-
     client.close();
+
+    if (updateResult.modifiedCount === 0) {
+      res.status(304).json({ message: "Not modified" });
+    }
 
     const responseMessage = `Success`;
     res.status(200).json({ message: responseMessage });
   } catch (error) {
     console.error('Error:', error);
-    res.status(500).json({ error: 'Error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
