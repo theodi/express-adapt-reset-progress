@@ -9,6 +9,40 @@ const app = express();
 const port = process.env.PORT || 3000;
 const mongoUri = process.env.MONGODB_URI;
 
+app.post('/:collection/:id', async (req, res) => {
+  const collectionName = req.params.collection;
+  const id = req.params.id;
+  const updateFields = req.body; // JSON data containing fields to update
+
+  try {
+    const objectId = ObjectId(id);
+    const client = await MongoClient.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+    const db = client.db(); // Get the database instance
+
+    const collection = db.collection(collectionName);
+
+    // Construct the update operation
+    const updateOperation = {
+      $set: updateFields, // Use $set to specify fields to update
+    };
+
+    // Perform the update operation
+    const updateResult = await collection.updateOne({ _id: objectId }, updateOperation);
+
+    if (updateResult.modifiedCount === 0) {
+      throw new Error('No documents were updated. Document not found or no changes provided.');
+    }
+
+    client.close();
+
+    const responseMessage = `Update successful`;
+    res.status(200).json({ message: responseMessage });
+  } catch (error) {
+    console.error('Error updating object:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 // Define the route for resetting page-level progress
 app.get('/resetPageLevelProgress', async (req, res) => {
   const courseId = req.query['course-id'];
