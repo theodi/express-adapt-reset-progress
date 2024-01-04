@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const app = express();
+app.use(express.json());
 const port = process.env.PORT || 3000;
 const mongoUri = process.env.MONGODB_URI;
 
@@ -30,16 +31,16 @@ app.post('/:collection/:id', async (req, res) => {
     const updateResult = await collection.updateOne({ _id: objectId }, updateOperation);
 
     if (updateResult.modifiedCount === 0) {
-      throw new Error('No documents were updated. Document not found or no changes provided.');
+      throw new Error('Not modified');
     }
 
     client.close();
 
-    const responseMessage = `Update successful`;
+    const responseMessage = `Success`;
     res.status(200).json({ message: responseMessage });
   } catch (error) {
-    console.error('Error updating object:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Error' });
   }
 });
 
